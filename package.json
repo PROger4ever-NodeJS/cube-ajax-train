@@ -1,0 +1,22 @@
+{
+  "name": "cube-ajax-train",
+  "version": "1.0.0",
+  "description": "Server for training cube to develop ajax",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PROger4ever-NodeJS/cube-ajax-train.git"
+  },
+  "author": "PROger4ever",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.7.0",
+    "koa-better-body": "^3.1.2",
+    "koa-better-router": "^2.1.1",
+    "koa-logger": "^3.2.1",
+    "koa2-cors": "^2.0.6"
+  }
+}
