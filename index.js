@@ -3,11 +3,13 @@ const Router = require('koa-better-router');
 const logger = require('koa-logger');
 const cors = require('koa2-cors');
 const body = require('koa-better-body');
+const send = require('koa-send');
 
 const env = (process.env.NODE_ENV || 'development').toLowerCase();
 
 const router = Router().loadMethods();
-const theHandler = function (ctx, next) {
+
+router.post('/sign-in', function (ctx, next) {
   const {user, password} = ctx.request.fields || {};
   if (user !== 'user' || password !== 'password') {
     ctx.status = 400;
@@ -32,10 +34,7 @@ const theHandler = function (ctx, next) {
   ctx.body = {
     access_token: '12154huhuhhihi'
   };
-};
-
-router.post('/cube-ajax-train/sign-in', theHandler);
-router.post('/cube-ajax-train2/sign-in', theHandler);
+});
 
 const app = new Koa();
 app.proxy = true;
@@ -46,6 +45,19 @@ if (env === 'development') {
 
 app.use(body());
 app.use(router.middleware());
+app.use(function (ctx, next) {
+  if (!ctx.path.startsWith('/public'))
+    return;
+
+  const filepath = ctx.path.replace('/public', '');
+  return send(ctx, filepath, { root: __dirname + '/public' }).catch((er) => {
+    /* istanbul ignore else */
+    if (er.code === 'ENOENT' && er.status === 404) {
+      ctx.status = 404;
+      ctx.body = 'Not Found';
+    }
+  })
+});
 
 let server = null;
 
